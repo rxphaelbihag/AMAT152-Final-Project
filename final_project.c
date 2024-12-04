@@ -19,7 +19,9 @@ int encrypt_page(int chosen_cipher, char * src, char * dest);
 void encrypt_text(char * src, int key, char * dest); // dummy function
 int decrypt_options();
 int decrypt_page(int chosen_cipher, char * src, char * dest);
+int learn_ciphers();
 
+// Functions for the Notes System
 int load_notes(struct note notes_list[]);
 void preview_list(struct note notes_list[], int note_count);
 void display_note(struct note notes_list[], int note_num);
@@ -31,6 +33,7 @@ int delete_note(struct note notes_list[], int * note_count, int note_del);
 int edit_note(struct note notes_list[], int note_edit);
 
 
+// Function to print the options in home
 int home_options() {
     int response = 0;
     char buffer[STRINGMAX];
@@ -41,26 +44,29 @@ int home_options() {
     printf("[3] Go to Notes\n");
     printf("[4] Learn about the Ciphers\n");
     printf("[5] Exit\n>>> ");
-    fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+    fgets(buffer, STRINGMAX, stdin);
     sscanf(buffer, "%d", &response);
     return response;
 }
 
+// Function to show the cipher options
 int encrypt_options() {
     int response = 0;
     char buffer[STRINGMAX];
     
+    // Cipher Options
     printf("\nWhich cipher would you like to use?\n");
     printf("[1] Caesar Cipher\n");
     printf("[2] XOR Cipher\n");
     printf("[3] Vigenere Cipher\n");
     printf("[4] Back\n>>> ");
     
-    fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+    fgets(buffer, STRINGMAX, stdin);
     sscanf(buffer, "%d", &response);
     return response;
 }
 
+// Function to display the encryption process and call the appropriate encryption function
 int encrypt_page(int chosen_cipher, char * src, char * dest) {
     
     int response = 0;
@@ -83,9 +89,10 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
 
     // Input the key
     printf("\nEnter Key:\n>>> ");
-    fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+    fgets(buffer, STRINGMAX, stdin);
     sscanf(buffer, "%d", &key);
 
+    // Calls the appropriate cipher function
     if (chosen_cipher == 1) {
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
@@ -94,7 +101,8 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
         encrypt_text(src, key, dest);
     }
 
-    printf("\nDecrypted Text:\n%s, %d\n\n", dest, strlen(dest));
+    // Display the output and asks for next action
+    printf("\nEncrypted Text:\n%s, %d\n\n", dest, strlen(dest));
     printf("[1] Encrypt another\n");
     printf("[2] Back\n>>> ");
     fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
@@ -109,6 +117,7 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
     }
 }
 
+// Temporary "encryption" function
 void encrypt_text(char * src, int key, char *dest) {
     printf("src: %s\n", src);
     char temp[2];
@@ -118,25 +127,28 @@ void encrypt_text(char * src, int key, char *dest) {
     strcpy(dest, temp);
 }
 
+// Function to show the cipher options, basically same as the encrypt options
 int decrypt_options() {
     int response = 0;
     char buffer[STRINGMAX];
     
+    // Cipher options
     printf("\nWhich cipher would you like to use?\n");
     printf("[1] Caesar Cipher\n");
     printf("[2] XOR Cipher\n");
     printf("[3] Vigenere Cipher\n");
     printf("[4] Back\n>>> ");
     
-    fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+    fgets(buffer, STRINGMAX, stdin); 
     sscanf(buffer, "%d", &response);
     return response;
 }
 
+// Function to display the decryption process and call the appropriate decryption function
 int decrypt_page(int chosen_cipher, char * src, char * dest) {
     
     int response = 0;
-    char cipher[STRINGMAX]; // stores the cipher name
+    char cipher[STRINGMAX];
     int key=0;
     char buffer[STRINGMAX];
 
@@ -158,6 +170,7 @@ int decrypt_page(int chosen_cipher, char * src, char * dest) {
     fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
     sscanf(buffer, "%d", &key);
 
+    // calls the appropriate decryption function
     if (chosen_cipher == 1) {
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
@@ -166,10 +179,11 @@ int decrypt_page(int chosen_cipher, char * src, char * dest) {
         encrypt_text(src, key, dest);
     }
 
+    // Displays the output
     printf("\nPlain Text:\n%s\n\n", dest);
     printf("[1] Decrypt another\n");
     printf("[2] Back\n>>> ");
-    fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+    fgets(buffer, STRINGMAX, stdin);
     sscanf(buffer, "%d", &response);
 
     if (response == 1) {
@@ -181,8 +195,7 @@ int decrypt_page(int chosen_cipher, char * src, char * dest) {
     }
 }
 
-int learn_ciphers();
-
+// Function to display the information page
 int learn_ciphers() {
     int response = 0;
     printf("=== Learn About Ciphers! ===\n");
@@ -199,6 +212,8 @@ int learn_ciphers() {
 
     return 12;
 }
+
+/* -------- FUNCTIONS FOR THE NOTES SYSTEM -------- */
 
 int load_notes(struct note notes_list[]) {
     FILE *file = fopen(FILEPATH, "r");
