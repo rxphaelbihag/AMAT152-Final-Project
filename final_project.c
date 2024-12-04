@@ -21,7 +21,7 @@ int decrypt_options();
 int decrypt_page(int chosen_cipher, char * src, char * dest);
 int learn_ciphers();
 
-// Functions for the Notes System
+// Function prototypes for the Notes System
 int load_notes(struct note notes_list[]);
 void preview_list(struct note notes_list[], int note_count);
 void display_note(struct note notes_list[], int note_num);
@@ -31,6 +31,10 @@ int create_note(struct note notes_list[], int * note_count);
 void save_notes(struct note notes_list[], int note_count);
 int delete_note(struct note notes_list[], int * note_count, int note_del);
 int edit_note(struct note notes_list[], int note_edit);
+
+// Function prototypes for the ciphers
+void xor_encrypt(char src[], int key, char dest[]);
+void xor_decrypt(char src[], int key, char dest[]);
 
 
 // Function to print the options in home
@@ -96,13 +100,13 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
     if (chosen_cipher == 1) {
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
-        encrypt_text(src, key, dest);
+        xor_encrypt(src, key, dest);
     } else if (chosen_cipher == 3){
         encrypt_text(src, key, dest);
     }
 
     // Display the output and asks for next action
-    printf("\nEncrypted Text:\n%s, %d\n\n", dest, strlen(dest));
+    printf("\nEncrypted Text:\n%s\n\n", dest);
     printf("[1] Encrypt another\n");
     printf("[2] Back\n>>> ");
     fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
@@ -174,7 +178,7 @@ int decrypt_page(int chosen_cipher, char * src, char * dest) {
     if (chosen_cipher == 1) {
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
-        encrypt_text(src, key, dest);
+        xor_decrypt(src, key, dest);
     } else if (chosen_cipher == 3){
         encrypt_text(src, key, dest);
     }
@@ -427,6 +431,26 @@ int edit_note(struct note notes_list[], int note_edit) {
     }
 
     return 5;
+}
+
+/* -------- FUNCTIONS FOR CIPHERS --------*/
+
+void xor_encrypt(char src[], int key, char dest[]) {
+    int i = 0;
+    while (src[i] != '\0') {
+        dest[i] = src[i] ^ key; 
+        i++;
+    }
+    dest[i] = '\0';
+}
+
+void xor_decrypt(char src[], int key, char dest[]) {
+    int i = 0;
+    while (src[i] != '\0') {
+        dest[i] = src[i] ^ key;
+        i++;
+    }
+    dest[i] = '\0';
 }
 
 int main() {
