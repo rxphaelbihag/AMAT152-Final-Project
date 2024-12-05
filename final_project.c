@@ -626,12 +626,11 @@ int main() {
                     preview_list(notes_list, note_count);
                     printf("\nWhich note to open?\n>>> ");
                     scanf("%d", &note_num);
-                    note_num--;
+                    note_num--; // transform it to index
                     getchar();
 
-                    strcpy(plaintext, notes_list[note_num].message);
-
-                    if (note_num > note_count) {
+                    printf("%d\t%d\n", note_num, note_count);
+                    if (note_num >= note_count || note_num < 0) {
                         printf("Note not found.");
                         note_num = 0;
                         page2 = 0;
