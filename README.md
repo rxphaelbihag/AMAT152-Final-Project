@@ -1,0 +1,1 @@
+Hey guys !! If you're reading this, I'm already dead. char,,, anyways ito yung github repo para sa amat152 proj obv para yk may memories tayo, para hindi madaling madelete ang code or ma overwrite ang code since sinesave naten ang code after every version, and yk para makapag practice using github since palagi itong ginagamit sa industry. 
