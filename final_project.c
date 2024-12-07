@@ -120,7 +120,7 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
         fgets(keyword, STRINGMAX, stdin);
         keyword[strcspn(keyword, "\n")] = '\0';
         vigenere_encrypt(src, keyword, dest);
-        
+
     }
 
     // Display the output and asks for next action
@@ -335,7 +335,6 @@ int note_encrypt_page(int chosen_cipher, char * src, char * dest) {
 
     printf("-- Encrypting Using %s --\n", cipher);
 
-    
 
     if (chosen_cipher == 1) {
         // Input the key
@@ -353,8 +352,10 @@ int note_encrypt_page(int chosen_cipher, char * src, char * dest) {
         // Input the key
         printf("\nEnter Key (Word):\n>>> ");
         fgets(keyword, STRINGMAX, stdin);
-        vigenere_decrypt(src, keyword, dest);
+        keyword[strcspn(keyword, "\n")] = '\0';
+        vigenere_encrypt(src, keyword, dest);
     } else {
+        
         return response;
     }
 
@@ -400,6 +401,7 @@ int note_decrypt_page(int chosen_cipher, char * src, char * dest) {
         // Input the key
         printf("\nEnter Key (Word):\n>>> ");
         fgets(keyword, STRINGMAX, stdin);
+        keyword[strcspn(keyword, "\n")] = '\0';
         vigenere_decrypt(src, keyword, dest);
     }
 
@@ -526,7 +528,7 @@ void vigenere_decrypt(const char *text, const char *keyword, char *decryptedtext
 void vigenere_encrypt(const char *text, const char *keyword, char *encryptedtext) {
     
     //declare an array variable for the new key
-    char newkey[100];
+    char newkey[STRINGMAX];
     char key_letter;
     //declare the length of the text as a variable
     int textlen = strlen(text), keylen = strlen(keyword);
@@ -548,8 +550,9 @@ void vigenere_encrypt(const char *text, const char *keyword, char *encryptedtext
             newkey[i] = text[i]; //non-alphabetic characters will not change
         }
     }
+
     newkey[textlen] = '\0'; //add null terminator in the end
-    
+
     for(int i = 0; i < textlen; i++) {
         if (isupper(text[i])) { //check if a certain character in the text is uppercase
             encryptedtext[i] = ((text[i] - 'A' + (newkey[i] - 'A')) % 26) + 'A';
@@ -560,6 +563,7 @@ void vigenere_encrypt(const char *text, const char *keyword, char *encryptedtext
         else {
             encryptedtext[i] = text[i]; //non-alphabetic characters will not change
         }
+
     }
     encryptedtext[textlen] = '\0'; //add null terminator in the end
 }
@@ -568,7 +572,7 @@ void vigenere_encrypt(const char *text, const char *keyword, char *encryptedtext
 void vigenere_decrypt(const char *text, const char *keyword, char *decryptedtext) {
     
     //declare an array variable for the new key 
-    char newkey[100];
+    char newkey[STRINGMAX];
     char key_letter;
     //declare the length of the text as a variable
     int textlen = strlen(text), keylen = strlen(keyword);
@@ -832,7 +836,9 @@ int main() {
 
                         // Vigenere cipher
                         else if (page5 == 3) {
+                            printf("\n####################: %s\n", processedtext);
                             page6 = note_encrypt_page(3, plaintext, processedtext);
+                            printf("\n##################: %s\n", processedtext);
                             if (page6 == 1) {
                                 page5 = 0;
                                 page4 = 0;
