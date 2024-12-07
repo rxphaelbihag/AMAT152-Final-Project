@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
+
 
 #define STRINGMAX 1000
 #define FILEPATH "data.txt"
@@ -35,6 +37,10 @@ int edit_note(struct note notes_list[], int note_edit);
 // Function prototypes for the ciphers
 void xor_encrypt(char src[], int key, char dest[]);
 void xor_decrypt(char src[], int key, char dest[]);
+
+void vigenere_generatekey(const char *text, const char *keyword, char *newkey);
+void vigenere_encrypt(const char *text, const char *key, char *encryptedtext);
+void vigenere_decrypt(const char *text, const char *key, char *decryptedtext);
 
 
 // Function to print the options in home
@@ -76,6 +82,7 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
     int response = 0;
     char cipher[STRINGMAX]; // stores the cipher name
     int key=0;
+    char keyword[STRINGMAX];
     char buffer[STRINGMAX];
 
     if (chosen_cipher == 1) {
@@ -91,18 +98,29 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
     printf("\nEnter Message:\n>>> ");
     fgets(src, STRINGMAX, stdin);
 
-    // Input the key
-    printf("\nEnter Key:\n>>> ");
-    fgets(buffer, STRINGMAX, stdin);
-    sscanf(buffer, "%d", &key);
+    
 
     // Calls the appropriate cipher function
     if (chosen_cipher == 1) {
+        // Input the key
+        printf("\nEnter Key:\n>>> ");
+        fgets(buffer, STRINGMAX, stdin);
+        sscanf(buffer, "%d", &key);
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
+        // Input the key
+        printf("\nEnter Key (Integer):\n>>> ");
+        fgets(buffer, STRINGMAX, stdin);
+        sscanf(buffer, "%d", &key);
         xor_encrypt(src, key, dest);
     } else if (chosen_cipher == 3){
-        encrypt_text(src, key, dest);
+        // Input the key
+        printf("\nEnter Key (Word):\n>>> ");
+
+        fgets(keyword, STRINGMAX, stdin);
+        keyword[strcspn(keyword, "\n")] = '\0';
+        vigenere_encrypt(src, keyword, dest);
+        
     }
 
     // Display the output and asks for next action
@@ -154,6 +172,7 @@ int decrypt_page(int chosen_cipher, char * src, char * dest) {
     int response = 0;
     char cipher[STRINGMAX];
     int key=0;
+    char keyword[STRINGMAX];
     char buffer[STRINGMAX];
 
     if (chosen_cipher == 1) {
@@ -169,18 +188,26 @@ int decrypt_page(int chosen_cipher, char * src, char * dest) {
     printf("\nEnter Message:\n>>> ");
     fgets(src, STRINGMAX, stdin);
 
-    // Input the key
-    printf("\nEnter Key:\n>>> ");
-    fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
-    sscanf(buffer, "%d", &key);
 
     // calls the appropriate decryption function
     if (chosen_cipher == 1) {
+        // Input the key
+        printf("\nEnter Key:\n>>> ");
+        fgets(buffer, STRINGMAX, stdin);
+        sscanf(buffer, "%d", &key);
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
+        // Input the key
+        printf("\nEnter Key (Integer):\n>>> ");
+        fgets(buffer, STRINGMAX, stdin);
+        sscanf(buffer, "%d", &key);
         xor_decrypt(src, key, dest);
     } else if (chosen_cipher == 3){
-        encrypt_text(src, key, dest);
+        // Input the key
+        printf("\nEnter Key (Word):\n>>> ");
+        fgets(keyword, STRINGMAX, stdin);
+        keyword[strcspn(keyword, "\n")] = '\0';
+        vigenere_decrypt(src, keyword, dest);
     }
 
     // Displays the output
@@ -291,7 +318,9 @@ int note_encrypt_page(int chosen_cipher, char * src, char * dest) {
     int response = 0;
     char cipher[STRINGMAX]; // stores the cipher name
     int key=0;
+    char keyword[STRINGMAX];
     char buffer[STRINGMAX];
+
 
     if (chosen_cipher == 1) {
         strcpy(cipher, "Caesar Cipher");
@@ -322,10 +351,9 @@ int note_encrypt_page(int chosen_cipher, char * src, char * dest) {
         xor_encrypt(src, key, dest);
     } else if (chosen_cipher == 3){
         // Input the key
-        printf("\nEnter Key:\n>>> ");
-        fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
-        sscanf(buffer, "%d", &key);
-        encrypt_text(src, key, dest);
+        printf("\nEnter Key (Word):\n>>> ");
+        fgets(keyword, STRINGMAX, stdin);
+        vigenere_decrypt(src, keyword, dest);
     } else {
         return response;
     }
@@ -341,6 +369,7 @@ int note_decrypt_page(int chosen_cipher, char * src, char * dest) {
     int response = 0;
     char cipher[STRINGMAX]; // stores the cipher name
     int key=0;
+    char keyword[STRINGMAX];
     char buffer[STRINGMAX];
 
     if (chosen_cipher == 1) {
@@ -369,10 +398,9 @@ int note_decrypt_page(int chosen_cipher, char * src, char * dest) {
         xor_decrypt(src, key, dest);
     } else if (chosen_cipher == 3){
         // Input the key
-        printf("\nEnter Key:\n>>> ");
-        fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
-        sscanf(buffer, "%d", &key);
-        encrypt_text(src, key, dest);
+        printf("\nEnter Key (Word):\n>>> ");
+        fgets(keyword, STRINGMAX, stdin);
+        vigenere_decrypt(src, keyword, dest);
     }
 
     printf("Plaintext:\n%s\n", dest);
@@ -409,6 +437,8 @@ int create_note(struct note notes_list[], int * note_count) {
 
     (*note_count)++;
     save_notes(notes_list, *note_count);
+
+    return 0;
 }
 
 
@@ -486,6 +516,94 @@ void xor_decrypt(char src[], int key, char dest[]) {
         i++;
     }
     dest[i] = '\0';
+}
+
+//declare the functions to be used
+void vigenere_encrypt(const char *text, const char *keyword, char *encryptedtext);
+void vigenere_decrypt(const char *text, const char *keyword, char *decryptedtext);
+
+//void function for vigenere encryption
+void vigenere_encrypt(const char *text, const char *keyword, char *encryptedtext) {
+    
+    //declare an array variable for the new key
+    char newkey[100];
+    char key_letter;
+    //declare the length of the text as a variable
+    int textlen = strlen(text), keylen = strlen(keyword);
+    
+    //for loop for the text and keyword 
+    for(int i = 0, j = 0; i < textlen; i++) {
+        if(isalpha(text[i])) { //check if certain character in the text is an alphabetic character
+            key_letter = keyword[j % keylen]; //to get the matching character of text[i] in the keyword
+            if(isupper(text[i])) {
+                newkey[i] = toupper(key_letter); //converts a certain character in the key into uppercase
+            }
+            else {
+                newkey[i] = tolower(key_letter); //converts a certain character in the key into lowercase
+            }
+            
+            j++; //keyword will only match with alphabetic characters in the text
+        }
+        else {
+            newkey[i] = text[i]; //non-alphabetic characters will not change
+        }
+    }
+    newkey[textlen] = '\0'; //add null terminator in the end
+    
+    for(int i = 0; i < textlen; i++) {
+        if (isupper(text[i])) { //check if a certain character in the text is uppercase
+            encryptedtext[i] = ((text[i] - 'A' + (newkey[i] - 'A')) % 26) + 'A';
+        }
+        else if (islower(text[i])) { //check if a certain character in the text is lowercase
+            encryptedtext[i] = ((text[i] - 'a' + (newkey[i] - 'a')) % 26) + 'a';
+        }
+        else {
+            encryptedtext[i] = text[i]; //non-alphabetic characters will not change
+        }
+    }
+    encryptedtext[textlen] = '\0'; //add null terminator in the end
+}
+
+//void function for vigenere decryption
+void vigenere_decrypt(const char *text, const char *keyword, char *decryptedtext) {
+    
+    //declare an array variable for the new key 
+    char newkey[100];
+    char key_letter;
+    //declare the length of the text as a variable
+    int textlen = strlen(text), keylen = strlen(keyword);
+    
+    //for loop for the text and keyword 
+    for(int i = 0, j = 0; i < textlen; i++) {
+        if(isalpha(text[i])) { //check if certain character in the text is an alphabetic character
+            key_letter = keyword[j % keylen]; //to get the matching character of text[i] in the keyword
+            if(isupper(text[i])) {
+                newkey[i] = toupper(key_letter); //converts a certain character in the key into uppercase
+            }
+            else {
+                newkey[i] = tolower(key_letter); //converts a certain character in the key into lowercase
+            }
+            
+            j++; //keyword will only match with alphabetic characters in the text
+        }
+        else {
+            newkey[i] = text[i]; //non-alphabetic characters will not change
+        }
+    }
+    newkey[textlen] = '\0'; //add null terminator in the end
+    
+    for(int i = 0; i < textlen; i++) {
+        if (isupper(text[i])) { //check if a certain character in the encrypted text is uppercase
+            decryptedtext[i] = (((text[i] - 'A' - (newkey[i] - 'A')) + 26) % 26) + 'A'; 
+        }
+        else if (islower(text[i])) { //check if a certain character in the encrypted text is lowercase
+            decryptedtext[i] = (((text[i] - 'a' - (newkey[i] - 'a')) + 26) % 26) + 'a';
+        }
+        else {
+            decryptedtext[i] = text[i]; //non-alphabetic characters will not change
+        }
+    }
+    decryptedtext[textlen] = '\0'; //add null terminator in the end
 }
 
 int main() {
