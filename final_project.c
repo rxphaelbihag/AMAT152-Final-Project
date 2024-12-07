@@ -254,6 +254,20 @@ void preview_list(struct note notes_list[], int note_count) {
     }
 }
 
+void wrap_output(const char *str, int wrap_length) {
+    int len = strlen(str);
+    for (int i = 0; i < len; i++) {
+        putchar(str[i]);
+        if ((i + 1) % wrap_length == 0) { // Check if we've reached the wrap length
+            putchar('\n');
+        }
+    }
+    // Add a newline if the string didn't end exactly at a wrap point
+    if (len % wrap_length != 0) {
+        putchar('\n');
+    }
+}
+
 void display_note(struct note notes_list[], int note_num) {
     printf("=== Notes ===\n\n");
     printf("Title: %s\n", notes_list[note_num].title);
@@ -287,21 +301,33 @@ int note_encrypt_page(int chosen_cipher, char * src, char * dest) {
         strcpy(cipher, "Vigenere Cipher");
     } else {
         printf("ERROR");
+        return response;
     }
 
     printf("-- Encrypting Using %s --\n", cipher);
 
-    // Input the key
-    printf("\nEnter Key:\n>>> ");
-    fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
-    sscanf(buffer, "%d", &key);
+    
 
     if (chosen_cipher == 1) {
+        // Input the key
+        printf("\nEnter Key:\n>>> ");
+        fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+        sscanf(buffer, "%d", &key);
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
-        encrypt_text(src, key, dest);
+        // Input the key
+        printf("\nEnter Key (Integer):\n>>> ");
+        fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+        sscanf(buffer, "%d", &key);
+        xor_encrypt(src, key, dest);
     } else if (chosen_cipher == 3){
+        // Input the key
+        printf("\nEnter Key:\n>>> ");
+        fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+        sscanf(buffer, "%d", &key);
         encrypt_text(src, key, dest);
+    } else {
+        return response;
     }
 
     printf("Encrypted text:\n%s\n", dest);
@@ -327,16 +353,25 @@ int note_decrypt_page(int chosen_cipher, char * src, char * dest) {
 
     printf("-- Decrypting Using %s --\n", cipher);
 
-    // Input the key
-    printf("\nEnter Key:\n>>> ");
-    fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
-    sscanf(buffer, "%d", &key);
+    
 
     if (chosen_cipher == 1) {
+        // Input the key
+        printf("\nEnter Key:\n>>> ");
+        fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+        sscanf(buffer, "%d", &key);
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
-        encrypt_text(src, key, dest);
+        // Input the key
+        printf("\nEnter Key (Integer):\n>>> ");
+        fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+        sscanf(buffer, "%d", &key);
+        xor_decrypt(src, key, dest);
     } else if (chosen_cipher == 3){
+        // Input the key
+        printf("\nEnter Key:\n>>> ");
+        fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
+        sscanf(buffer, "%d", &key);
         encrypt_text(src, key, dest);
     }
 
@@ -375,7 +410,6 @@ int create_note(struct note notes_list[], int * note_count) {
     (*note_count)++;
     save_notes(notes_list, *note_count);
 }
-
 
 
 int delete_note(struct note notes_list[], int * note_count, int note_del) {
@@ -418,14 +452,15 @@ int edit_note(struct note notes_list[], int note_edit) {
     if (response == 1) {
         printf("Enter new title:\n>>> ");
         fgets(new, STRINGMAX, stdin);
-
         strcpy(notes_list[note_edit].title, new);
+
     } else if (response == 2) {
         printf("Enter new message:\n>>> ");
         fgets(new, STRINGMAX, stdin);
-
         strcpy(notes_list[note_edit].message, new);
+        
     } else if (response == 3) {
+        return 5;
     } else {
         printf("Invalid Input. Try again.");
     }
@@ -642,7 +677,7 @@ int main() {
                 
                 // Opens a note
                 else if (page3 == 1) {
-                    
+                    strcpy(plaintext, notes_list[note_num].message);
                     // At first enter
                     if (page4 == 0) {
                         display_note(notes_list, note_num);
