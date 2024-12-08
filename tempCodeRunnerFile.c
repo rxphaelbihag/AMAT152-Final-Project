@@ -1,1 +1,1 @@
-note_num
+GRN

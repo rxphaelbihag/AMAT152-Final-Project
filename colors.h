@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 //Regular text
 #define BLK "\e[0;30m"
 #define RED "\e[0;31m"
@@ -74,13 +72,3 @@
 #define reset "\e[0m"
 #define CRESET "\e[0m"
 #define COLOR_RESET "\e[0m"
-
-int main(){
-	
-	// printf(BRED "Hey this is the color red, and it's bold! \n" reset);
-	// printf(GRNB "If" BLU "you" YEL "are" GRN "bored" CYN "do" MAG "this! \n" reset); 
-	// printf(BRED "If" BBLU "you" BYEL "are" BGRN "bored" BCYN "do" BMAG "this! \n" reset); 
-	// printf(URED "If" UBLU "you" UYEL "are" UGRN "bored" UCYN "do" UMAG "this! \n" reset);
-
-	printf(WHTHB BHBLU"=== WELCOME TO <INSERT APP NAME> ===\n"reset);
-return 0;};

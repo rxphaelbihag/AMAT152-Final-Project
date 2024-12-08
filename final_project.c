@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include "colors.h"
 
 
 #define STRINGMAX 1000
@@ -47,13 +48,14 @@ void vigenere_decrypt(const char *text, const char *key, char *decryptedtext);
 int home_options() {
     int response = 0;
     char buffer[STRINGMAX];
-    printf("=== WELCOME TO <INSERT APP NAME> ===\n");
-    printf("\nWhat would you like to do?\n");
-    printf("[1] Encrypt Text\n");
-    printf("[2] Decrypt Text\n");
-    printf("[3] Go to Notes\n");
-    printf("[4] Learn about the Ciphers\n");
-    printf("[5] Exit\n>>> ");
+    printf(BBLU"=== "BYEL"WELCOME TO <INSERT APP NAME>"BBLU" ===\n"reset);
+    // printf("=== WELCOME TO <INSERT APP NAME> ===\n");
+    printf(BWHT"\nWhat would you like to do?\n");
+    printf(CYN"[1] Encrypt Text\n");
+    printf(MAG"[2] Decrypt Text\n");
+    printf(CYN"[3] Go to Notes\n");
+    printf(MAG"[4] Learn about the Ciphers\n");
+    printf(BRED"[5] Exit\n"HGRN">>> "reset);
     fgets(buffer, STRINGMAX, stdin);
     sscanf(buffer, "%d", &response);
     return response;
@@ -65,11 +67,11 @@ int encrypt_options() {
     char buffer[STRINGMAX];
     
     // Cipher Options
-    printf("\nWhich cipher would you like to use?\n");
-    printf("[1] Caesar Cipher\n");
-    printf("[2] XOR Cipher\n");
-    printf("[3] Vigenere Cipher\n");
-    printf("[4] Back\n>>> ");
+    printf(BWHT"\nWhich cipher would you like to use?\n");
+    printf(MAG"[1] Caesar Cipher\n");
+    printf(CYN"[2] XOR Cipher\n");
+    printf(MAG"[3] Vigenere Cipher\n");
+    printf(BRED"[4] Back\n"HGRN">>> "reset);
     
     fgets(buffer, STRINGMAX, stdin);
     sscanf(buffer, "%d", &response);
@@ -93,9 +95,9 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
         strcpy(cipher, "Vigenere Cipher");
     }
 
-    printf("=== Encrypt Text Using %s ===\n", cipher);
+    printf("=== "BYEL"Encrypt Text Using "UYEL"%s"reset" ===\n", cipher);
 
-    printf("\nEnter Message:\n>>> ");
+    printf(BLU"\nEnter Message:\n"BGRN">>> "reset);
     fgets(src, STRINGMAX, stdin);
 
     
@@ -103,19 +105,19 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
     // Calls the appropriate cipher function
     if (chosen_cipher == 1) {
         // Input the key
-        printf("\nEnter Key:\n>>> ");
+        printf(BLU"\nEnter Key:\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin);
         sscanf(buffer, "%d", &key);
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
         // Input the key
-        printf("\nEnter Key (Integer):\n>>> ");
+        printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin);
         sscanf(buffer, "%d", &key);
         xor_encrypt(src, key, dest);
     } else if (chosen_cipher == 3){
         // Input the key
-        printf("\nEnter Key (Word):\n>>> ");
+        printf(BLU"\nEnter Key (Word):\n"BGRN">>> "reset);
 
         fgets(keyword, STRINGMAX, stdin);
         keyword[strcspn(keyword, "\n")] = '\0';
@@ -124,9 +126,9 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
     }
 
     // Display the output and asks for next action
-    printf("\nEncrypted Text:\n%s\n\n", dest);
-    printf("[1] Encrypt another\n");
-    printf("[2] Back\n>>> ");
+    printf(YEL"\nEncrypted Text:\n"reset"%s\n\n", dest);
+    printf(MAG"[1] Encrypt another\n");
+    printf(BRED"[2] Back\n"BGRN">>> "reset);
     fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
     sscanf(buffer, "%d", &response);
 
@@ -155,11 +157,11 @@ int decrypt_options() {
     char buffer[STRINGMAX];
     
     // Cipher options
-    printf("\nWhich cipher would you like to use?\n");
-    printf("[1] Caesar Cipher\n");
-    printf("[2] XOR Cipher\n");
-    printf("[3] Vigenere Cipher\n");
-    printf("[4] Back\n>>> ");
+    printf(BWHT"\nWhich cipher would you like to use?\n");
+    printf(MAG"[1] Caesar Cipher\n");
+    printf(CYN"[2] XOR Cipher\n");
+    printf(MAG"[3] Vigenere Cipher\n");
+    printf(BRED"[4] Back\n"HGRN">>> "reset);
     
     fgets(buffer, STRINGMAX, stdin); 
     sscanf(buffer, "%d", &response);
@@ -183,38 +185,40 @@ int decrypt_page(int chosen_cipher, char * src, char * dest) {
         strcpy(cipher, "Vigenere Cipher");
     }
 
-    printf("=== Decrypt Text Using %s ===\n", cipher);
+    printf("=== "BYEL"Decrypt Text Using "UYEL"%s"reset" ===\n", cipher);
 
-    printf("\nEnter Message:\n>>> ");
+    printf(BLU"\nEnter Message:\n"BGRN">>> "reset);
     fgets(src, STRINGMAX, stdin);
 
 
-    // calls the appropriate decryption function
+    // Calls the appropriate cipher function
     if (chosen_cipher == 1) {
         // Input the key
-        printf("\nEnter Key:\n>>> ");
+        printf(BLU"\nEnter Key:\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin);
         sscanf(buffer, "%d", &key);
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
         // Input the key
-        printf("\nEnter Key (Integer):\n>>> ");
+        printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin);
         sscanf(buffer, "%d", &key);
         xor_decrypt(src, key, dest);
     } else if (chosen_cipher == 3){
         // Input the key
-        printf("\nEnter Key (Word):\n>>> ");
+        printf(BLU"\nEnter Key (Word):\n"BGRN">>> "reset);
+
         fgets(keyword, STRINGMAX, stdin);
         keyword[strcspn(keyword, "\n")] = '\0';
         vigenere_decrypt(src, keyword, dest);
+
     }
 
     // Displays the output
-    printf("\nPlain Text:\n%s\n\n", dest);
-    printf("[1] Decrypt another\n");
-    printf("[2] Back\n>>> ");
-    fgets(buffer, STRINGMAX, stdin);
+    printf(YEL"\nPlain Text:\n"reset"%s\n\n", dest);
+    printf(MAG"[1] Decrypt another\n");
+    printf(BRED"[2] Back\n"BGRN">>> "reset);
+    fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
     sscanf(buffer, "%d", &response);
 
     if (response == 1) {
@@ -274,41 +278,31 @@ int load_notes(struct note notes_list[]) {
 }
 
 void preview_list(struct note notes_list[], int note_count) {
-    printf("=== NOTES ===\n");
-    printf("\nNO.\tTITLE\n");
+    printf("=== "BYEL"NOTES"reset" ===\n");
+    printf(BWHT"\nNO.\tTITLE\n");
     for (int i = 0; i < note_count; i++) {
-        printf("%d\t%s\n", i+1, notes_list[i].title);
-    }
-}
-
-void wrap_output(const char *str, int wrap_length) {
-    int len = strlen(str);
-    for (int i = 0; i < len; i++) {
-        putchar(str[i]);
-        if ((i + 1) % wrap_length == 0) { // Check if we've reached the wrap length
-            putchar('\n');
+        if (i%2 == 0) {
+            printf(MAG"%d\t%s\n"reset, i+1, notes_list[i].title);
+        } else {
+            printf(CYN"%d\t%s\n"reset, i+1, notes_list[i].title);
         }
-    }
-    // Add a newline if the string didn't end exactly at a wrap point
-    if (len % wrap_length != 0) {
-        putchar('\n');
     }
 }
 
 void display_note(struct note notes_list[], int note_num) {
-    printf("=== Notes ===\n\n");
-    printf("Title: %s\n", notes_list[note_num].title);
-    printf("Message: \n %s\n\n", notes_list[note_num].message);
+    printf("=== "BYEL"Notes"reset" ===\n\n");
+    printf(BBLU"Title: "reset"%s\n\n", notes_list[note_num].title);
+    printf(BBLU"Message: \n"reset"%s\n\n", notes_list[note_num].message);
 }
 
 int note_options() {
     int response = 0;
-    printf("What would you like to do?\n");
-    printf("[1] Encrypt it\n");
-    printf("[2] Decrypt it\n");
-    printf("[3] Edit\n");
-    printf("[4] Delete\n");
-    printf("[5] Back to notes\n>>> ");
+    printf(BWHT"What would you like to do?\n");
+    printf(CYN"[1] Encrypt it\n");
+    printf(MAG"[2] Decrypt it\n");
+    printf(GRN"[3] Edit\n");
+    printf(RED"[4] Delete\n");
+    printf(BRED"[5] Back to notes\n"BGRN">>> "reset);
     scanf("%d", &response);
     getchar();
     return response;
@@ -333,34 +327,30 @@ int note_encrypt_page(int chosen_cipher, char * src, char * dest) {
         return response;
     }
 
-    printf("-- Encrypting Using %s --\n", cipher);
-
+    printf("-- "BYEL"Decrypting Using "UYEL"%s"reset" --\n", cipher);
 
     if (chosen_cipher == 1) {
         // Input the key
-        printf("\nEnter Key:\n>>> ");
+        printf(BLU"\nEnter Key:\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
         sscanf(buffer, "%d", &key);
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
         // Input the key
-        printf("\nEnter Key (Integer):\n>>> ");
+        printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
         sscanf(buffer, "%d", &key);
         xor_encrypt(src, key, dest);
     } else if (chosen_cipher == 3){
         // Input the key
-        printf("\nEnter Key (Word):\n>>> ");
+        printf(BLU"\nEnter Key (Word):\n"BGRN">>> "reset);
         fgets(keyword, STRINGMAX, stdin);
         keyword[strcspn(keyword, "\n")] = '\0';
         vigenere_encrypt(src, keyword, dest);
-    } else {
-        
-        return response;
     }
 
-    printf("Encrypted text:\n%s\n", dest);
-    printf("[1] Back\n>>> ");
+    printf(YEL"Encrypted text:\n"reset"%s\n", dest);
+    printf(BRED"[1] Back\n"BGRN">>> "reset);
     scanf("%d", &response);
     getchar();
     return response;
@@ -381,32 +371,30 @@ int note_decrypt_page(int chosen_cipher, char * src, char * dest) {
         strcpy(cipher, "Vigenere Cipher");
     }
 
-    printf("-- Decrypting Using %s --\n", cipher);
-
-    
+    printf("-- "BYEL"Decrypting Using "UYEL"%s"reset" --\n", cipher);
 
     if (chosen_cipher == 1) {
         // Input the key
-        printf("\nEnter Key:\n>>> ");
+        printf(BLU"\nEnter Key:\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
         sscanf(buffer, "%d", &key);
         encrypt_text(src, key, dest);
     } else if (chosen_cipher == 2){
         // Input the key
-        printf("\nEnter Key (Integer):\n>>> ");
+        printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
         sscanf(buffer, "%d", &key);
         xor_decrypt(src, key, dest);
     } else if (chosen_cipher == 3){
         // Input the key
-        printf("\nEnter Key (Word):\n>>> ");
+        printf(BLU"\nEnter Key (Word):\n"BGRN">>> "reset);
         fgets(keyword, STRINGMAX, stdin);
         keyword[strcspn(keyword, "\n")] = '\0';
         vigenere_decrypt(src, keyword, dest);
     }
 
-    printf("Plaintext:\n%s\n", dest);
-    printf("[1] Back\n>>> ");
+    printf(YEL"Plaintext:\n"reset"%s\n", dest);
+    printf(BRED"[1] Back\n"BGRN">>> "reset);
     scanf("%d", &response);
     getchar();
     return response;
@@ -427,13 +415,13 @@ void save_notes(struct note notes_list[], int note_count) {
 }
 
 int create_note(struct note notes_list[], int * note_count) {
-    printf("=== Notes ===\n");
-    printf("\n-- Creating New Note --\n");
-    printf("Enter title:\n>>> ");
+    printf("=== "BYEL"Notes"reset" ===\n");
+    printf(BWHT"\n-- Creating New Note --\n");
+    printf(BLU"Enter title:\n"BGRN">>> "reset);
     fgets(notes_list[*note_count].title, STRINGMAX, stdin);
     notes_list[*note_count].title[strcspn(notes_list[*note_count].title, "\n")] = '\0';  // Remove newline
 
-    printf("Enter message:\n>>> ");
+    printf(BLU"Enter message:\n"BGRN">>> "reset);
     fgets(notes_list[*note_count].message, STRINGMAX, stdin);
     notes_list[*note_count].message[strcspn(notes_list[*note_count].message, "\n")] = '\0';  // Remove newline
 
@@ -448,8 +436,8 @@ int delete_note(struct note notes_list[], int * note_count, int note_del) {
 
     int response=0;
 
-    printf("Are you sure you want to delete this note?\n");
-    printf("[1] YES\n[2] BACK\n>>> ");
+    printf(BWHT"Are you sure you want to delete this note?\n");
+    printf(BCYN"[1] YES\n"BRED"[2] BACK\n"BGRN">>> "reset);
     scanf("%d", &response);
     getchar();
 
@@ -473,21 +461,21 @@ int edit_note(struct note notes_list[], int note_edit) {
     int response = 0;
     char new[STRINGMAX];
 
-    printf("\n-- Editing --\n");
-    printf("Which part to edit?\n");
-    printf("[1] Title\n");
-    printf("[2] Message\n");
-    printf("[3] Back\n>>> ");
+    printf("\n-- "BYEL"Editing"reset" --\n");
+    printf(BWHT"Which part to edit?\n");
+    printf(MAG"[1] Title\n");
+    printf(CYN"[2] Message\n");
+    printf(BRED"[3] Back\n"BGRN">>> "reset);
     scanf("%d", &response);
     getchar();
 
     if (response == 1) {
-        printf("Enter new title:\n>>> ");
+        printf(BLU"Enter new title:\n"BGRN">>> "reset);
         fgets(new, STRINGMAX, stdin);
         strcpy(notes_list[note_edit].title, new);
 
     } else if (response == 2) {
-        printf("Enter new message:\n>>> ");
+        printf(BLU"Enter new message:\n"BGRN">>> "reset);
         fgets(new, STRINGMAX, stdin);
         strcpy(notes_list[note_edit].message, new);
         
@@ -633,7 +621,7 @@ int main() {
 
             // At first enter
             if (page2 == 0) {
-                printf("=== Encrypt Text ===\n");
+                printf("=== "BYEL"Encrypt Text"reset" ===\n");
                 page2 = encrypt_options();
             }
             
@@ -697,7 +685,7 @@ int main() {
 
             // At first enter
             if (page2 == 0) {
-                printf("=== Decrypt Text ===\n");
+                printf("=== "BYEL"Decrypt Text"reset" ===\n");
                 page2 = decrypt_options();
             }
             
@@ -761,10 +749,10 @@ int main() {
             // At first enter
             if (page2 == 0) {
                 preview_list(notes_list, note_count);
-                printf("\nWhat would you like to do?\n");
-                printf("[1] Create a note\n");
-                printf("[2] Open/Edit note using note number\n");
-                printf("[3] Back\n>>> ");
+                printf(BWHT"\nWhat would you like to do?\n");
+                printf(BLU"[1] Create a note\n");
+                printf(YEL"[2] Open/Edit note using note number\n");
+                printf(BRED"[3] Back\n"BGRN">>> "reset);
                 scanf("%d", &page2);
                 getchar();
             }
@@ -781,12 +769,12 @@ int main() {
                 // At first enter
                 if (page3 == 0) {
                     preview_list(notes_list, note_count);
-                    printf("\nWhich note to open?\n>>> ");
+                    printf(BWHT"\nWhich note to open?\n"BGRN">>> "reset);
                     scanf("%d", &note_num);
                     note_num--; // transform it to index
                     getchar();
 
-                    printf("%d\t%d\n", note_num, note_count);
+                    // printf("%d\t%d\n", note_num, note_count);
                     if (note_num >= note_count || note_num < 0) {
                         printf("Note not found.");
                         note_num = 0;
@@ -809,11 +797,14 @@ int main() {
                     // Encrypt note
                     else if (page4 == 1) {
                         display_note(notes_list, note_num);
-                        printf("-- Encrypting --\n");
-                        page5 = encrypt_options();
+                        
+                        if (page5 == 0) {
+                            printf("-- "BYEL"Encrypting"reset" --\n");
+                            page5 = encrypt_options();
+                        }
                         
                         // Caesar Cipher
-                        if (page5 == 1) {
+                        else if (page5 == 1) {
                             page6 = note_encrypt_page(1, plaintext, processedtext);
                             if (page6 == 1) {
                                 page5 = 0;
@@ -836,9 +827,7 @@ int main() {
 
                         // Vigenere cipher
                         else if (page5 == 3) {
-                            printf("\n####################: %s\n", processedtext);
                             page6 = note_encrypt_page(3, plaintext, processedtext);
-                            printf("\n##################: %s\n", processedtext);
                             if (page6 == 1) {
                                 page5 = 0;
                                 page4 = 0;
@@ -865,9 +854,12 @@ int main() {
                     else if (page4 == 2) {
 
                         display_note(notes_list, note_num);
-                        printf("-- Decrypting --\n");
-                        page5 = decrypt_options();
                         
+                        if (page5 == 0) {
+                            printf("-- "BYEL"Decrypting"reset" --\n");
+                            page5 = decrypt_options();
+                        }
+
                         // Caesar Cipher
                         if (page5 == 1) {
                             page6 = note_decrypt_page(1, plaintext, processedtext);
