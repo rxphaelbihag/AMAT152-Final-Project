@@ -2,12 +2,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <unistd.h>
 #include "colors.h"
 
 
 #define STRINGMAX 1000
 #define FILEPATH "data.txt"
 #define MAXNOTES 100
+#define SLEEP 1
 
 // Structure to represent a Note
 struct note{
@@ -233,11 +235,15 @@ int decrypt_page(int chosen_cipher, char * src, char * dest) {
 // Function to display the information page
 int learn_ciphers() {
     int response = 0;
-    printf("=== Learn About Ciphers! ===\n");
-    printf("\nThis page will show some information about the ciphers\n");
-    printf("used in the program. It can also include our names!! >U< \n");
+    printf("=== "BYEL"Learn About Ciphers!"reset" ===\n");
+    printf(CYN"\nCaesar Cipher\n"reset);
+    printf("The Caesar Cipher is one of the simplest and oldest encryption techniques. It works by shifting each letter in the plaintext by a fixed number of positions in the alphabet. For example, with a shift of 3, the letter 'A' becomes 'D', 'B' becomes 'E', and so on. This method is easy to implement and decrypt but is not secure by modern standards, as it can be broken using brute force or frequency analysis.\n");
+    printf(CYN"\nXOR Cipher\n"reset);
+    printf("The XOR (Exclusive OR) Cipher is a fundamental encryption method that uses the XOR operation between the plaintext and a key. Each bit of the plaintext is XORed with the corresponding bit of the key to produce the ciphertext. This method is fast and effective for short keys but requires the key to be the same length as the message to ensure security. XOR is widely used in modern cryptography as part of more complex algorithms.\n");
+    printf(CYN"\nVigenere Cipher\n"reset);
+    printf("The Vigenere Cipher is a polyalphabetic cipher that uses a keyword to encrypt the plaintext. Each letter of the plaintext is shifted by a number of positions based on the corresponding letter in the keyword. This method is more secure than the Caesar Cipher because it uses multiple shifting patterns, making it resistant to frequency analysis. However, its security depends on the secrecy and randomness of the keyword.\n");
 
-    printf("\n[1] Back\n>>> ");
+    printf(BRED"\n[1] Back\n"BGRN">>> "reset);
     scanf("%d", &response);
     getchar();
 
@@ -483,6 +489,8 @@ int edit_note(struct note notes_list[], int note_edit) {
         return 5;
     } else {
         printf("Invalid Input. Try again.");
+        sleep(SLEEP);
+
     }
 
     return 5;
@@ -635,6 +643,7 @@ int main() {
                     page2 = 0;
                 } else {
                     printf("Invalid Input. Try Again.");
+                    sleep(SLEEP);
                     page2 = 0;
                 }
             }
@@ -648,6 +657,7 @@ int main() {
                     page2 = 0;
                 } else {
                     printf("Invalid Input. Try Again.");
+                    sleep(SLEEP);
                     page2 = 0;
                 }
             
@@ -662,6 +672,7 @@ int main() {
                     page2 = 0;
                 } else {
                     printf("Invalid Input. Try Again.");
+                    sleep(SLEEP);
                     page2 = 0;
                 }
             }
@@ -675,6 +686,7 @@ int main() {
 
             else {
                 printf("Invalid Input. Try Again.");
+                sleep(SLEEP);
                 page2 = 0;
                 page3 = 0;
             }
@@ -698,6 +710,7 @@ int main() {
                     page2 = 0;
                 } else {
                     printf("Invalid Input. Try Again.");
+                    sleep(SLEEP);
                     page2 = 0;
                 }
             }
@@ -711,6 +724,7 @@ int main() {
                     page2 = 0;
                 } else {
                     printf("Invalid Input. Try Again.");
+                    sleep(SLEEP);
                     page2 = 0;
                 }
             
@@ -725,6 +739,7 @@ int main() {
                     page2 = 0;
                 } else {
                     printf("Invalid Input. Try Again.");
+                    sleep(SLEEP);
                     page2 = 0;
                 }
             }
@@ -738,6 +753,7 @@ int main() {
 
             else {
                 printf("Invalid Input. Try Again.");
+                sleep(SLEEP);
                 page2 = 0;
                 page3 = 0;
             }
@@ -811,6 +827,7 @@ int main() {
                                 page4 = 0;
                             } else {
                                 printf("Invalid Input. Try Again.");
+                                sleep(SLEEP);
                             }
                         }
 
@@ -822,6 +839,7 @@ int main() {
                                 page4 = 0;
                             } else {
                                 printf("Invalid Input. Try Again.");
+                                sleep(SLEEP);
                             }
                         }
 
@@ -833,6 +851,7 @@ int main() {
                                 page4 = 0;
                             } else {
                                 printf("Invalid Input. Try Again.");
+                                sleep(SLEEP);
                             }
                         }
 
@@ -844,6 +863,7 @@ int main() {
 
                         else {
                             printf("Invalid Input. Try Again.");
+                            sleep(SLEEP);
                             page6=0;
                             page5=0;
                             page4=0;
@@ -868,6 +888,7 @@ int main() {
                                 page4 = 0;
                             } else {
                                 printf("Invalid Input. Try Again.");
+                                sleep(SLEEP);
                             }
                         }
 
@@ -879,6 +900,7 @@ int main() {
                                 page4 = 0;
                             } else {
                                 printf("Invalid Input. Try Again.");
+                                sleep(SLEEP);
                             }
                         }
 
@@ -890,6 +912,7 @@ int main() {
                                 page4 = 0;
                             } else {
                                 printf("Invalid Input. Try Again.");
+                                sleep(SLEEP);
                             }
                         }
 
@@ -901,6 +924,7 @@ int main() {
 
                         else {
                             printf("Invalid Input. Try again.");
+                            sleep(SLEEP);
                             page6=0;
                             page5=0;
                             page4=0;
@@ -932,12 +956,14 @@ int main() {
                     // Invalid input
                     else {
                         printf("Invalid Input. Try again.");
+                        sleep(SLEEP);
                         page4 = 0;
                     }
                 }
 
                 else {
                     printf("Invalid Input. Try again.");
+                    sleep(SLEEP);
                 }
             }
             
@@ -949,6 +975,7 @@ int main() {
 
             else {
                 printf("Invalid Input. Try again.");
+                sleep(SLEEP);
                 page2 = 0;
             }
 
@@ -959,6 +986,7 @@ int main() {
         }
         else {
             printf("Invalid Input. Try again.");
+            sleep(SLEEP);
             page1 = 0;
         }
         
