@@ -38,10 +38,12 @@ int delete_note(struct note notes_list[], int * note_count, int note_del);
 int edit_note(struct note notes_list[], int note_edit);
 
 // Function prototypes for the ciphers
+void caesar_encrypt(char src[], int key, char dest[]);
+void caesar_decrypt(char src[], int key, char dest[]);
+
 void xor_encrypt(char src[], int key, char dest[]);
 void xor_decrypt(char src[], int key, char dest[]);
 
-void vigenere_generatekey(const char *text, const char *keyword, char *newkey);
 void vigenere_encrypt(const char *text, const char *key, char *encryptedtext);
 void vigenere_decrypt(const char *text, const char *key, char *decryptedtext);
 
@@ -101,16 +103,17 @@ int encrypt_page(int chosen_cipher, char * src, char * dest) {
 
     printf(BLU"\nEnter Message:\n"BGRN">>> "reset);
     fgets(src, STRINGMAX, stdin);
+    src[strcspn(src, "\n")] = '\0';
 
     
 
     // Calls the appropriate cipher function
     if (chosen_cipher == 1) {
         // Input the key
-        printf(BLU"\nEnter Key:\n"BGRN">>> "reset);
+        printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin);
         sscanf(buffer, "%d", &key);
-        encrypt_text(src, key, dest);
+        caesar_encrypt(src, key, dest);
     } else if (chosen_cipher == 2){
         // Input the key
         printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
@@ -191,15 +194,16 @@ int decrypt_page(int chosen_cipher, char * src, char * dest) {
 
     printf(BLU"\nEnter Message:\n"BGRN">>> "reset);
     fgets(src, STRINGMAX, stdin);
+    src[strcspn(src, "\n")] = '\0';
 
 
     // Calls the appropriate cipher function
     if (chosen_cipher == 1) {
         // Input the key
-        printf(BLU"\nEnter Key:\n"BGRN">>> "reset);
+        printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin);
         sscanf(buffer, "%d", &key);
-        encrypt_text(src, key, dest);
+        caesar_decrypt(src, key, dest);
     } else if (chosen_cipher == 2){
         // Input the key
         printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
@@ -337,10 +341,10 @@ int note_encrypt_page(int chosen_cipher, char * src, char * dest) {
 
     if (chosen_cipher == 1) {
         // Input the key
-        printf(BLU"\nEnter Key:\n"BGRN">>> "reset);
+        printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
         sscanf(buffer, "%d", &key);
-        encrypt_text(src, key, dest);
+        caesar_encrypt(src, key, dest);
     } else if (chosen_cipher == 2){
         // Input the key
         printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
@@ -381,10 +385,10 @@ int note_decrypt_page(int chosen_cipher, char * src, char * dest) {
 
     if (chosen_cipher == 1) {
         // Input the key
-        printf(BLU"\nEnter Key:\n"BGRN">>> "reset);
+        printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
         fgets(buffer, STRINGMAX, stdin); // Read the entire line into buffer
         sscanf(buffer, "%d", &key);
-        encrypt_text(src, key, dest);
+        caesar_decrypt(src, key, dest);
     } else if (chosen_cipher == 2){
         // Input the key
         printf(BLU"\nEnter Key (Integer):\n"BGRN">>> "reset);
@@ -498,6 +502,50 @@ int edit_note(struct note notes_list[], int note_edit) {
 
 /* -------- FUNCTIONS FOR CIPHERS --------*/
 
+void caesar_encrypt(char src[], int key, char dest[]) {
+
+    if (*src == '\0') {
+        *dest = '\0';
+        return;
+    }
+    
+    switch (*src) {
+        case 'A' ... 'Z': // Uppercase letters
+            *dest = (((*src - 65) + key) % 26) + 65;
+            break;
+        case 'a' ... 'z': // Lowercase letters
+            *dest = (((*src - 97) + key) % 26) + 97;
+            break;
+        default: // Non-alphabetic characters
+            *dest = *src;
+            break;
+    }
+    
+    caesar_encrypt(src+1, key, dest+1);
+        
+}
+
+void caesar_decrypt(char src[], int key, char dest[]) {
+    if (*src == '\0') {
+        *dest = '\0';
+        return;
+    }
+    
+    switch (*src) {
+        case 'A' ... 'Z': // Uppercase letters
+            *dest = (((*src - 65 - key) % 26 + 26) % 26) + 65;
+            break;
+        case 'a' ... 'z': // Lowercase letters
+            *dest = (((*src - 97 - key) % 26 + 26) % 26) + 97;
+            break;
+        default: // Non-alphabetic characters
+            *dest = *src;
+            break;
+    }
+    
+    caesar_decrypt(src+1, key, dest+1);
+}
+
 void xor_encrypt(char src[], int key, char dest[]) {
     int i = 0;
     while (src[i] != '\0') {
@@ -516,9 +564,7 @@ void xor_decrypt(char src[], int key, char dest[]) {
     dest[i] = '\0';
 }
 
-//declare the functions to be used
-void vigenere_encrypt(const char *text, const char *keyword, char *encryptedtext);
-void vigenere_decrypt(const char *text, const char *keyword, char *decryptedtext);
+
 
 //void function for vigenere encryption
 void vigenere_encrypt(const char *text, const char *keyword, char *encryptedtext) {
@@ -983,6 +1029,20 @@ int main() {
         
         else if (page1 == 4) {
             page1 = learn_ciphers();
+        }
+
+        else if (page1 == 25) {
+            printf(BYEL"   MERRY CHRISTMAS!!\n\n"reset);
+            printf("      *********      \n""    *           *    \n""  *    O     O    *  \n"" *       \\_/       * \n""*    \\_________/    *\n"" *                 * \n""  *               *  \n""    *           *    \n""      *********      \n");
+            sleep(SLEEP);
+            page1 = 0;
+        }
+
+        else if (page1 == 69) {
+            printf(BMAG"   Love Lots Boo !!\n\n"BRED);
+            printf("  ***     ***  \n *****   ***** \n******* *******\n ************* \n  ***********  \n   *********   \n    *******    \n     *****     \n      ***      \n       *       \n");
+            sleep(SLEEP);
+            page1 = 0;
         }
         else {
             printf("Invalid Input. Try again.");
