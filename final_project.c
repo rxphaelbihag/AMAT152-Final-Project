@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <windows.h>
 #include "colors.h"
 
 
@@ -245,6 +246,8 @@ int learn_ciphers() {
     printf("The XOR (Exclusive OR) Cipher is a fundamental encryption method that uses the XOR operation between the plaintext and a key. Each bit of the plaintext is XORed with the corresponding bit of the key to produce the ciphertext. This method is fast and effective for short keys but requires the key to be the same length as the message to ensure security. XOR is widely used in modern cryptography as part of more complex algorithms.\n");
     printf(CYN"\nVigenere Cipher\n"reset);
     printf("The Vigenere Cipher is a polyalphabetic cipher that uses a keyword to encrypt the plaintext. Each letter of the plaintext is shifted by a number of positions based on the corresponding letter in the keyword. This method is more secure than the Caesar Cipher because it uses multiple shifting patterns, making it resistant to frequency analysis. However, its security depends on the secrecy and randomness of the keyword.\n");
+    printf(CYN"\nImportance of Cryptography in the Modern World\n"reset);
+    printf("Cryptography is a cornerstone of modern technology, playing a critical role in securing sensitive information and ensuring data privacy. By encrypting data, cryptography ensures confidentiality, preventing unauthorized access to private communications or transactions. It also safeguards data integrity by protecting it from tampering during transmission or storage. These principles are essential for maintaining trust in digital systems, especially in industries like banking, healthcare, and e-commerce, where sensitive data is frequently transmitted over the internet. Advanced cryptographic protocols such as RSA, AES, and ECC form the backbone of secure internet communications, ensuring that information cannot be intercepted or hacked without the proper decryption keys.");
 
     printf(BRED"\n[1] Back\n"BGRN">>> "reset);
     scanf("%d", &response);
@@ -288,22 +291,12 @@ int load_notes(struct note notes_list[]) {
 
 void preview_list(struct note notes_list[], int note_count) {
     printf("=== "BYEL"NOTES"reset" ===\n");
-    printf(BWHT"\nNO.\tTITLE\n");
+    printf("\nNO.\tTITLE\n");
     for (int i = 0; i < note_count; i++) {
         if (i%2 == 0) {
-            if (strlen(notes_list[i].title)>15) {
-                printf(MAGB"%-8d%.12s...\n"reset, i+1, notes_list[i].title);
-            }
-            else {
-                printf(MAGB"%-8d%-15.15s\n"reset, i+1, notes_list[i].title);
-            }
+            printf("%d\t%s\n", i+1, notes_list[i].title);
         } else {
-            if (strlen(notes_list[i].title)>15) {
-                printf(CYNB"%-8d%.12s...\n"reset, i+1, notes_list[i].title);
-            }
-            else {
-                printf(CYNB"%-8d%-15.15s\n"reset, i+1, notes_list[i].title);
-            }
+            printf("%d\t%s\n", i+1, notes_list[i].title);
         }
     }
 }
@@ -492,11 +485,13 @@ int edit_note(struct note notes_list[], int note_edit) {
         printf(BLU"Enter new title:\n"BGRN">>> "reset);
         fgets(new, STRINGMAX, stdin);
         strcpy(notes_list[note_edit].title, new);
+        notes_list[note_edit].title[strcspn(notes_list[note_edit].title, "\n")] = '\0';
 
     } else if (response == 2) {
         printf(BLU"Enter new message:\n"BGRN">>> "reset);
         fgets(new, STRINGMAX, stdin);
         strcpy(notes_list[note_edit].message, new);
+        notes_list[note_edit].message[strcspn(notes_list[note_edit].message, "\n")] = '\0';
         
     } else if (response == 3) {
         return 5;
@@ -505,7 +500,6 @@ int edit_note(struct note notes_list[], int note_edit) {
         sleep(SLEEP);
 
     }
-
     return 5;
 }
 
@@ -990,6 +984,7 @@ int main() {
                     else if (page4 == 3) {
                         display_note(notes_list, note_num);
                         page4 = edit_note(notes_list, note_num);
+                        save_notes(notes_list, note_count);
                     }
                     
                     // To delete the note
