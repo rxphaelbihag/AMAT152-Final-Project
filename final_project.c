@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <unistd.h>
 #include "colors.h"
 
 
@@ -292,9 +291,19 @@ void preview_list(struct note notes_list[], int note_count) {
     printf(BWHT"\nNO.\tTITLE\n");
     for (int i = 0; i < note_count; i++) {
         if (i%2 == 0) {
-            printf(MAG"%d\t%s\n"reset, i+1, notes_list[i].title);
+            if (strlen(notes_list[i].title)>15) {
+                printf(MAGB"%-8d%.12s...\n"reset, i+1, notes_list[i].title);
+            }
+            else {
+                printf(MAGB"%-8d%-15.15s\n"reset, i+1, notes_list[i].title);
+            }
         } else {
-            printf(CYN"%d\t%s\n"reset, i+1, notes_list[i].title);
+            if (strlen(notes_list[i].title)>15) {
+                printf(CYNB"%-8d%.12s...\n"reset, i+1, notes_list[i].title);
+            }
+            else {
+                printf(CYNB"%-8d%-15.15s\n"reset, i+1, notes_list[i].title);
+            }
         }
     }
 }
@@ -359,8 +368,8 @@ int note_encrypt_page(int chosen_cipher, char * src, char * dest) {
         vigenere_encrypt(src, keyword, dest);
     }
 
-    printf(YEL"Encrypted text:\n"reset"%s\n", dest);
-    printf(BRED"[1] Back\n"BGRN">>> "reset);
+    printf(YEL"\nEncrypted text:\n"reset"%s\n", dest);
+    printf(BRED"\n[1] Back\n"BGRN">>> "reset);
     scanf("%d", &response);
     getchar();
     return response;
@@ -403,8 +412,8 @@ int note_decrypt_page(int chosen_cipher, char * src, char * dest) {
         vigenere_decrypt(src, keyword, dest);
     }
 
-    printf(YEL"Plaintext:\n"reset"%s\n", dest);
-    printf(BRED"[1] Back\n"BGRN">>> "reset);
+    printf(YEL"\nPlaintext:\n"reset"%s\n", dest);
+    printf(BRED"\n[1] Back\n"BGRN">>> "reset);
     scanf("%d", &response);
     getchar();
     return response;
